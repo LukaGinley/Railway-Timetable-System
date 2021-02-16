@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+// GIT TEST
+// CHANGE MADE HERE!!
+
 public class DataLoader {
 	private static final String PATH_MONFRI = "MondayFriday.csv"; // Path to Monday - Friday timetable
 	private static final String PATH_SAT = "Saturday.csv"; // Path to Saturday timetable
