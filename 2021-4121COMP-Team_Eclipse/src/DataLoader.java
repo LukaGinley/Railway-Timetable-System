@@ -5,17 +5,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-// GIT TEST
-// CHANGE MADE HERE!!
-// ADDED MORE COMMENTS OMG!
-// THIS IS EPIC!
-// ECLIPSE GANG
-// Gang Gang 
 
 public class DataLoader {
 	private static final String PATH_MONFRI = "MondayFriday.csv"; // Path to Monday - Friday timetable
 	private static final String PATH_SAT = "Saturday.csv"; // Path to Saturday timetable
-	// private static final String PATH_SUN = "Sunday.csv"; #TODO
+	private static final String PATH_SUN = "Sunday.csv"; // Path to Sunday Timetable
 	private static final String PATH_CODES = "RailwayStationCodes.csv";
 	private static HashMap<String, String> codeMap; // Maps station names to station codes
 	private static HashMap<String, Station> stationMap; // Maps station codes to station objects
@@ -25,11 +19,11 @@ public class DataLoader {
 		stationMap = new HashMap<>();
 		Timetable monFriTable = loadTable(PATH_MONFRI, "Monday - Friday"); // Loads stations and times from file
 		Timetable satTable = loadTable(PATH_SAT, "Saturday");
-		// Timetable sunTable = loadTable(PATH_SUN, "Sunday");
+		Timetable sunTable = loadTable(PATH_SUN, "Sunday");
 
-		UserInterface.runProgram(monFriTable, satTable); // Passes control to UserInterface class
+		// UserInterface.runProgram(monFriTable, satTable); // Passes control to UserInterface class
 
-		// UserInterface.runProgram(monFriTable, satTable, sunTable);
+		 UserInterface.runProgram(monFriTable, satTable, sunTable);
 	}
 
 	private static HashMap<String, String> setCodeMap(String filePath) throws FileNotFoundException { // First column is name, second codes
@@ -74,9 +68,9 @@ public class DataLoader {
 			case PATH_SAT:
 				station.setSatTimes(times);
 				break;
-			//case PATH_SUN:
-				//station.setSunTimes(times);
-				//break;
+			case PATH_SUN:
+				station.setSunTimes(times);
+				break;
 			}
 			
 			table.formatStationNames();  //Correctly format station names for tabular display based on max column width

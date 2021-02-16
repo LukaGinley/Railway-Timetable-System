@@ -7,7 +7,7 @@ public class UserInterface {
 	static int currentPage = 0;
 	static int finalPage;
 
-	public static void runProgram(Timetable monFriTable, Timetable satTable) throws FileNotFoundException {
+	public static void runProgram(Timetable monFriTable, Timetable satTable, Timetable sunTable) throws FileNotFoundException {
 		while (true) {
 			String mainMenuSelection = mainMenu();
 			if (!mainMenuSelection.equals("4")) { // Run program until user enters '4' at main menu (Quit)
@@ -18,6 +18,9 @@ public class UserInterface {
 					break;
 				case "2":
 					selectedTimetable = satTable;
+					break;
+				case "3":
+					selectedTimetable = sunTable;
 					break;
 				default:
 					System.out.println("Error: Timetable selection not correctly set, defaulting to Monday-Friday");
@@ -44,11 +47,11 @@ public class UserInterface {
 		System.out.println("--- Java Console Based Railway Timetable ---");
 		System.out.println("1 - View Monday - Friday Timetable");
 		System.out.println("2 - View Saturday Timetable");
-		// System.out.println("3 - View Sunday Timetable");
+		System.out.println("3 - View Sunday Timetable");
 		System.out.println("4 - Quit");
 		System.out.println("Please input a number to proceed: ");
 
-		String mainMenuSelection = validate(new String[] { "1", "2", "4" });
+		String mainMenuSelection = validate(new String[] { "1", "2", "3", "4" });
 		return mainMenuSelection;
 	}
 
