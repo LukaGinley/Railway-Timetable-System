@@ -9,6 +9,7 @@ import java.util.Scanner;
 // CHANGE MADE HERE!!
 // ADDED MORE COMMENTS OMG!
 // THIS IS EPIC!
+// ECLIPSE GANG
 
 public class DataLoader {
 	private static final String PATH_MONFRI = "MondayFriday.csv"; // Path to Monday - Friday timetable
