@@ -7,6 +7,8 @@ import java.util.Scanner;
 
 // GIT TEST
 // CHANGE MADE HERE!!
+// ADDED MORE COMMENTS OMG!
+// THIS IS EPIC!
 
 public class DataLoader {
 	private static final String PATH_MONFRI = "MondayFriday.csv"; // Path to Monday - Friday timetable
