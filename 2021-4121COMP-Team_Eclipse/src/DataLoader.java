@@ -21,9 +21,7 @@ public class DataLoader {
 		Timetable satTable = loadTable(PATH_SAT, "Saturday");
 		Timetable sunTable = loadTable(PATH_SUN, "Sunday");
 
-		// UserInterface.runProgram(monFriTable, satTable); // Passes control to UserInterface class
-
-		 UserInterface.runProgram(monFriTable, satTable, sunTable);
+		 UserInterface.runProgram(monFriTable, satTable, sunTable); // Passes control to UserInterface class
 	}
 
 	private static HashMap<String, String> setCodeMap(String filePath) throws FileNotFoundException { // First column is name, second codes
