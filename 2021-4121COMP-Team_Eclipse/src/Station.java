@@ -19,6 +19,10 @@ public class Station {
 		return stationName;
 	}
 	
+	public String getCode() {
+		return stationCode;
+	}
+	
 	public void setFormattedName(String formattedName) {
 		this.formattedName = formattedName;
 	}

@@ -7,10 +7,11 @@ public class UserInterface {
 	static int currentPage = 0;
 	static int finalPage;
 
-	public static void runProgram(Timetable monFriTable, Timetable satTable, Timetable sunTable) throws FileNotFoundException {
+	public static void runProgram(Timetable monFriTable, Timetable satTable, Timetable sunTable)
+			throws FileNotFoundException {
 		while (true) {
 			String mainMenuSelection = mainMenu();
-			if (!mainMenuSelection.equals("4")) { // Run program until user enters '4' at main menu (Quit)
+			if (!mainMenuSelection.equals("5")) { // Run program until user enters '5' at main menu (Quit)
 				Timetable selectedTimetable = null;
 				switch (mainMenuSelection) { // Else, set timetable based on user selection
 				case "1":
@@ -22,6 +23,10 @@ public class UserInterface {
 				case "3":
 					selectedTimetable = sunTable;
 					break;
+				case "4":
+					if (filterStations(monFriTable)) {
+						break;
+					}
 				default:
 					System.out.println("Error: Timetable selection not correctly set, defaulting to Monday-Friday");
 					selectedTimetable = monFriTable;
@@ -42,13 +47,45 @@ public class UserInterface {
 		}
 
 	}
+	
+	private static boolean filterStations (Timetable selectedTimetable) {
+		System.out.println("Enter origin station name/code");
+		String origin = inputScan.nextLine();
+		System.out.println("Enter destination station name/code");
+		String destination = inputScan.nextLine();
+		
+		ArrayList<Station> stationList = selectedTimetable.getStationList();
+		boolean foundOrigin = false;
+		boolean foundDestination = false;
+		for (Station station : stationList) {
+			if(origin.equals(station.getCode()) || origin.equals(station.getName())) {
+				foundOrigin = true;
+				System.out.println("DEBUG: ORIGIN STATION FOUND");
+			}
+			if(destination.equals(station.getCode()) || destination.equals(station.getName())) {
+				foundDestination = true;
+				System.out.println("DEBUG: DESTINATION STATION FOUND");
+			}
+		}
+		if(foundOrigin == false) {
+			System.out.println("Could not find origin station");
+			return false;
+		}
+		if (foundDestination == false) {
+			System.out.println("Could not find destination station");
+			return false;
+		}
+		System.out.println("DEBUG: STATIONS CORRECTLY FOUND");
+		return true;		
+	}
 
 	private static String mainMenu() {
 		System.out.println("--- Java Console Based Railway Timetable ---");
 		System.out.println("1 - View Monday - Friday Timetable");
 		System.out.println("2 - View Saturday Timetable");
 		System.out.println("3 - View Sunday Timetable");
-		System.out.println("4 - Quit");
+		System.out.println("4 - Filter Stations");
+		System.out.println("5 - Quit");
 		System.out.println("Please input a number to proceed: ");
 
 		String mainMenuSelection = validate(new String[] { "1", "2", "3", "4" });
@@ -103,6 +140,7 @@ public class UserInterface {
 		// print out with tabs between the columns
 		System.out.println("-------------------------------------\n"+selectedTimetable.getSchedule()+"\n-------------------------------------");
 		for (Station station : stationList) {
+			//if (userInput.equals(station.getName() || userInput.equals(station.getCode())))
 			String printedRow = station.getFormattedName() + "\t";
 			ArrayList<String> stationTimes = selectedTimetable.getStationTimes(station);
 			for (int i = printFrom; i <= printTo; i++) {
