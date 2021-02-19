@@ -88,7 +88,7 @@ public class UserInterface {
 		System.out.println("5 - Quit");
 		System.out.println("Please input a number to proceed: ");
 
-		String mainMenuSelection = validate(new String[] { "1", "2", "3", "4" });
+		String mainMenuSelection = validate(new String[] { "1", "2", "3", "4", "5" });
 		return mainMenuSelection;
 	}
 
