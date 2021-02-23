@@ -75,7 +75,7 @@ public class DataLoader {
 
 			stationList.add(station);
 
-			for (int i = 1; i < parts.length; i++) { // For the rest of the parts in the row, add each to times list
+			for (int i = 1; i < parts.length; i++) {
 				times.add(parts[i]);
 			}
 
