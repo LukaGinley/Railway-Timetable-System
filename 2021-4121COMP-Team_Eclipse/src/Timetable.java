@@ -3,7 +3,7 @@ import java.util.HashMap;
 
 public class Timetable {
 	private static final int PAGE_WIDTH = 8;
-	private static HashMap<String, String> codeMap; // Will use for station filtering
+	private static HashMap<String, String> codeMap;
 	private static HashMap<String, Station> stationMap;
 	private String schedule;
 	private ArrayList<Station> stationList;
@@ -17,6 +17,14 @@ public class Timetable {
 		this.stationMap = stationMap;
 	}
 
+	/**
+	 * Get list of train stop times at a given station, based on the requesting
+	 * Timetable's schedule. e.g. Monday-Friday Timetable will get Monday-Friday
+	 * times from stations, Sunday Timetable will get Sunday times from stations
+	 * 
+	 * @param station - the station to get times for
+	 * @return ArrayList - containing list of train stop times at the given station
+	 */
 	public ArrayList<String> getStationTimes(Station station) {
 		ArrayList<String> stationTimes = null;
 		switch (schedule) {
@@ -36,11 +44,14 @@ public class Timetable {
 		return stationTimes;
 	}
 
+	/**
+	 * Formats the station names, so they align evenly in a table. Calculates the
+	 * longest station name, and appends sufficient spaces to the start of station
+	 * names to make them equal length
+	 */
 	public void formatStationNames() {
 		int longestName = getLongestName();
 		for (Station station : stationList) {
-			// Append spaces to the start of the station name, so it aligns evenly in a
-			// table
 			String formattedName = station.getName();
 			int toAppend = longestName - formattedName.length();
 			for (int i = 0; i < toAppend; i++) {
@@ -61,14 +72,20 @@ public class Timetable {
 		return longestName;
 	}
 
+	/**
+	 * Splits table up into separate pages the size of PAGE_WIDTH constant. If not
+	 * possible to divide equally, works out the remainder left to go on the final,
+	 * smaller page
+	 * 
+	 * @return int array - represents pages of the table Array contents = what index
+	 *         is printed *up to and including* on that page e.g. pages[0] == 7,
+	 *         pages[1] == 15 (for a page width of 8)
+	 */
 	public int[] delimitPages() {
 		int tableWidth = getTableWidth();
-		// Returns an int array representing pages of the table
-		// Array contents = what index is printed *up to and including* on that page
-		// e.g. pages[0] == 7, pages[1] == 15 (for a page width of 8)
-		int pageRemainder = tableWidth % PAGE_WIDTH; // Columns remaining after dividing into full-size pages
+		int pageRemainder = tableWidth % PAGE_WIDTH;
 		if (pageRemainder == 0) {
-			// If no remainder, table can be fully divided into even pages
+
 			int pageCount = tableWidth / PAGE_WIDTH;
 			pageLimits = new int[pageCount];
 			for (int i = 0; i < pageLimits.length; i++) {
@@ -76,8 +93,6 @@ public class Timetable {
 			}
 
 		} else {
-			// If remainder, table can be divided into even pages *with a smaller final
-			// page*
 			int pageCount = (tableWidth / PAGE_WIDTH) + 1;
 			pageLimits = new int[pageCount];
 			for (int i = 0; i < pageLimits.length - 1; i++) {
@@ -90,8 +105,12 @@ public class Timetable {
 
 	}
 
+	/**
+	 * 
+	 * @return int - total number of columns in timetable (total number of services
+	 *         / stops at a given station)
+	 */
 	private int getTableWidth() {
-		// Returns *total* number of time columns
 		int tableWidth = getStationTimes(stationList.get(0)).size();
 		return tableWidth;
 	}

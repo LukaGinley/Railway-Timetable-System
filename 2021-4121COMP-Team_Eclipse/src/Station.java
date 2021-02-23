@@ -3,13 +3,16 @@ import java.util.ArrayList;
 public class Station {
 	private String stationName;
 	private String stationCode;
+	private boolean hasParking;
+	private boolean hasBikeStorage;
+	private boolean hasDisabledAccess;
+	
 	private ArrayList<String> monFriTimes;
 	private ArrayList<String> satTimes;
 	private ArrayList<String> sunTimes;
 	private String formattedName; //Name with spaces added, so it can be printed in a table
 	
 	
-	//Has name of station, 3-letter code, list of train stop times
 	public Station(String stationName, String stationCode) {
 		this.stationName = stationName;
 		this.stationCode = stationCode;
