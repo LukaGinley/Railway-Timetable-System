@@ -17,7 +17,7 @@ public class Station {
 		this.stationName = stationName;
 		this.stationCode = stationCode;
 	}
-	
+
 	public String getName() {
 		return stationName;
 	}

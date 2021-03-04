@@ -7,6 +7,7 @@ public class Timetable {
 	private static HashMap<String, Station> stationMap;
 	private String schedule;
 	private ArrayList<Station> stationList;
+	private ArrayList<Station> filteredList;
 	private int[] pageLimits;
 
 	public Timetable(ArrayList<Station> stationList, String schedule, HashMap<String, String> codeMap,
@@ -15,6 +16,24 @@ public class Timetable {
 		this.schedule = schedule;
 		this.codeMap = codeMap;
 		this.stationMap = stationMap;
+	}
+	
+	public void setFilteredList(String origin, String destination) {
+		filteredList = new ArrayList<Station>(); 
+		for(Station station:stationList) {
+			if ((station.getCode().equals(destination)) ||(station.getCode().equals(origin))){
+				filteredList.add(station);
+			}
+		}
+	}
+	
+
+	public HashMap<String, String> getCodeMap() {
+		return codeMap;
+	}
+
+	public HashMap<String, Station> getStationMap() {
+		return stationMap;
 	}
 
 	/**
@@ -125,6 +144,10 @@ public class Timetable {
 
 	public ArrayList<Station> getStationList() {
 		return stationList;
+	}
+	
+	public ArrayList<Station> getFilteredList(){
+		return filteredList;
 	}
 
 }
