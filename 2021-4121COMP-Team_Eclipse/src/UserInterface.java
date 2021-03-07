@@ -48,7 +48,9 @@ public class UserInterface {
 		}
 
 	}
-
+	
+	
+	// TODO: Rework to allow for two directions
 	public static Timetable selectTimetable(Timetable monFriTable, Timetable satTable, Timetable sunTable) {
 		System.out.println("-- Select Timetable --");
 		System.out.println("1 - Monday - Friday");
@@ -101,6 +103,14 @@ public class UserInterface {
 		String originCode = inputScan.nextLine();
 		System.out.println("Enter destination station code:");
 		String destinationCode = inputScan.nextLine();
+		//TODO: Allow for either name or code (reuse code used elsewhere)
+		
+		//TODO: Work out direction of travel based on origin/destination
+		// give each station an index when loading in - work based on that?
+		
+		
+		
+		
 		ArrayList<Station> originalList = unfilteredTable.getStationList();
 		ArrayList<Station> filteredList = new ArrayList<>();
 		for (Station station : originalList) {
