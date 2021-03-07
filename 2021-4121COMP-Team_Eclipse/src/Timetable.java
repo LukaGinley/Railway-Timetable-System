@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Timetable {
+	public boolean isOriginDestinationFiltered;
 	private static final int PAGE_WIDTH = 8;
 	private static HashMap<String, String> codeMap;
 	private static HashMap<String, Station> stationMap;
@@ -9,24 +10,26 @@ public class Timetable {
 	private ArrayList<Station> stationList;
 	private ArrayList<Station> filteredList;
 	private int[] pageLimits;
+	private ArrayList<String> durationList;
+	public int toAppend;
 
 	public Timetable(ArrayList<Station> stationList, String schedule, HashMap<String, String> codeMap,
 			HashMap<String, Station> stationMap) {
+		this.isOriginDestinationFiltered = false;
 		this.stationList = stationList;
 		this.schedule = schedule;
 		this.codeMap = codeMap;
 		this.stationMap = stationMap;
 	}
-	
+
 	public void setFilteredList(String origin, String destination) {
-		filteredList = new ArrayList<Station>(); 
-		for(Station station:stationList) {
-			if ((station.getCode().equals(destination)) ||(station.getCode().equals(origin))){
+		filteredList = new ArrayList<Station>();
+		for (Station station : stationList) {
+			if ((station.getCode().equals(destination)) || (station.getCode().equals(origin))) {
 				filteredList.add(station);
 			}
 		}
 	}
-	
 
 	public HashMap<String, String> getCodeMap() {
 		return codeMap;
@@ -72,7 +75,7 @@ public class Timetable {
 		int longestName = getLongestName();
 		for (Station station : stationList) {
 			String formattedName = station.getName();
-			int toAppend = longestName - formattedName.length();
+			toAppend = longestName - formattedName.length();
 			for (int i = 0; i < toAppend; i++) {
 				formattedName = " " + formattedName;
 			}
@@ -124,6 +127,36 @@ public class Timetable {
 
 	}
 
+	public static String calculateDuration(String originTime, String destinationTime) {
+		int originHours = Integer.valueOf(originTime.substring(0, 2));
+		int originMins = Integer.valueOf(originTime.substring(2));
+		int destinationHours = Integer.valueOf(destinationTime.substring(0, 2));
+		int destinationMins = Integer.valueOf(destinationTime.substring(2));
+
+		int hourDifference = destinationHours - originHours;
+		int minDifference = destinationMins - originMins;
+
+		int totalDifference = hourDifference * 60 + minDifference;
+
+		String displayHours = String.format("%02d", totalDifference / 60);
+		String displayMins = String.format("%02d", totalDifference % 60);
+		String output = displayHours + "hrs " + displayMins + "mins";
+
+		return output;
+
+	}
+
+	public ArrayList<String> setDurations() {
+		durationList = new ArrayList<>();
+
+		ArrayList<String> originTimes = getStationTimes(stationList.get(0));
+		ArrayList<String> destinationTimes = getStationTimes(stationList.get(1));
+		for (int i = 0; i < originTimes.size(); i++) {
+			durationList.add(calculateDuration(originTimes.get(i), destinationTimes.get(i)));
+		}
+		return durationList;
+	}
+
 	/**
 	 * 
 	 * @return int - total number of columns in timetable (total number of services
@@ -145,8 +178,8 @@ public class Timetable {
 	public ArrayList<Station> getStationList() {
 		return stationList;
 	}
-	
-	public ArrayList<Station> getFilteredList(){
+
+	public ArrayList<Station> getFilteredList() {
 		return filteredList;
 	}
 

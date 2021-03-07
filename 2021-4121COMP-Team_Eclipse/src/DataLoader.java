@@ -90,8 +90,6 @@ public class DataLoader {
 				station.setSunTimes(times);
 				break;
 			}
-
-			table.formatStationNames(); // Correctly format station names for tabular display
 		}
 		return table;
 	}

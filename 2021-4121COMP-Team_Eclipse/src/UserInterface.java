@@ -28,7 +28,7 @@ public class UserInterface {
 				switch (mainMenuSelection) {
 				case "1":
 					selectedTimetable = selectTimetable(monFriTable, satTable, sunTable);
-					
+
 					break;
 				case "2":
 					selectedTimetable = filterTimetable(selectTimetable(monFriTable, satTable, sunTable));
@@ -88,7 +88,6 @@ public class UserInterface {
 	public static Timetable filterTimetable(Timetable unfilteredTable) {
 		String userSelection = filterMenu();
 		if (userSelection.equals("4")) {
-			System.err.println("Filter error, printing unfiltered table");
 			return unfilteredTable;
 		} else if (userSelection.equals("3")) {
 			return filterDouble(unfilteredTable);
@@ -103,28 +102,49 @@ public class UserInterface {
 		System.out.println("Enter destination station code:");
 		String destinationCode = inputScan.nextLine();
 		ArrayList<Station> originalList = unfilteredTable.getStationList();
-		ArrayList<Station> filteredList = new ArrayList<>(); 
-		for(Station station:originalList) {
-			if ((station.getCode().equals(destinationCode)) ||(station.getCode().equals(originCode))){
+		ArrayList<Station> filteredList = new ArrayList<>();
+		for (Station station : originalList) {
+			if ((station.getCode().equals(destinationCode)) || (station.getCode().equals(originCode))) {
 				filteredList.add(station);
 			}
 		}
-	
+
+		ArrayList<Integer> toRemove = new ArrayList<>();
+
+		for (Station station : filteredList) {
+			ArrayList<String> stationTimes = unfilteredTable.getStationTimes(station);
+			for (int i = 0; i < stationTimes.size(); i++) {
+				if (stationTimes.get(i).equals("-")) {
+					toRemove.add(i);
+				}
+			}
+		}
+
+		for (Station station : filteredList) {
+			ArrayList<String> stationTimes = unfilteredTable.getStationTimes(station);
+
+			for (int i = stationTimes.size() - 1; i >= 0; i--) {
+				if (toRemove.contains(i)) {
+					stationTimes.remove(i);
+				}
+			}
+		}
+
 		Timetable filteredTable = new Timetable(filteredList, unfilteredTable.getSchedule(),
 				unfilteredTable.getCodeMap(), unfilteredTable.getStationMap());
+		filteredTable.isOriginDestinationFiltered = true;
 		return filteredTable;
 	}
-	
 
 	public static Timetable filterSingle(Timetable unfilteredTable) {
 		System.out.println("Enter station code:");
 		String selectedCode = inputScan.nextLine();
 		ArrayList<Station> originalList = unfilteredTable.getStationList();
-		ArrayList<Station> filteredList = new ArrayList<>(); 
-		
+		ArrayList<Station> filteredList = new ArrayList<>();
+
 		Station selectedStation = null;
-		for(Station station:originalList) {
-			if (station.getCode().equals(selectedCode)){
+		for (Station station : originalList) {
+			if (station.getCode().equals(selectedCode)) {
 				selectedStation = station;
 			}
 		}
@@ -132,12 +152,13 @@ public class UserInterface {
 			System.err.println("Could not find station code, returning unfiltered table");
 			return unfilteredTable;
 		} else {
-			System.err.println("DEBUG: Station selected is " + selectedStation.getName()+" (" + selectedStation.getCode() + ")");
+			System.err.println(
+					"DEBUG: Station selected is " + selectedStation.getName() + " (" + selectedStation.getCode() + ")");
 		}
 		ArrayList<String> selectedTimes = unfilteredTable.getStationTimes(selectedStation);
 		System.err.println("Length of stationTimes for " + selectedCode + " is " + selectedTimes.size());
 		ArrayList<Integer> toRemove = new ArrayList<>();
-		for (int i = 0; i<selectedTimes.size(); i++) {
+		for (int i = 0; i < selectedTimes.size(); i++) {
 			if (selectedTimes.get(i).equals("-")) {
 				System.err.println("DEBUG: Index " + i + " contains " + selectedTimes.get(i));
 				System.err.println("TO REMOVE");
@@ -148,12 +169,12 @@ public class UserInterface {
 			}
 		}
 		filteredList = originalList;
-		for(Station station:filteredList) {
+		for (Station station : filteredList) {
 			System.err.println("Currently on station " + station.getName());
 			ArrayList<String> stationTimes = unfilteredTable.getStationTimes(station);
 
-			for (int i = stationTimes.size()-1; i >=0; i--) {
-				if(toRemove.contains(i)) {
+			for (int i = stationTimes.size() - 1; i >= 0; i--) {
+				if (toRemove.contains(i)) {
 					System.err.println("Removing column " + i + ", containing " + stationTimes.get(i));
 					stationTimes.remove(i);
 				} else {
@@ -161,14 +182,12 @@ public class UserInterface {
 				}
 			}
 		}
-		
-		
+
 		Timetable filteredTable = new Timetable(filteredList, unfilteredTable.getSchedule(),
 				unfilteredTable.getCodeMap(), unfilteredTable.getStationMap());
 		return filteredTable;
 	}
 
-	
 	/**
 	 * Prints main menu to screen, gets validated selection from user
 	 * 
@@ -231,6 +250,7 @@ public class UserInterface {
 	 *         is instead turning the page
 	 */
 	private static boolean drawTable(Timetable selectedTimetable) {
+		selectedTimetable.formatStationNames();
 		ArrayList<Station> stationList = selectedTimetable.getStationList();
 		int[] pageLimits = selectedTimetable.delimitPages();
 		finalPage = (pageLimits.length - 1);
@@ -252,35 +272,17 @@ public class UserInterface {
 			}
 			System.out.println(printedRow);
 		}
-		return pageMenu();
-	}
-
-	private static boolean drawFilteredTable(Timetable selectedTimetable) {
-		System.out.println("Enter origin station");
-		String origin = inputScan.nextLine();
-		System.out.println("Enter destination station");
-		String destination = inputScan.nextLine();
-		selectedTimetable.setFilteredList(origin, destination);
-		ArrayList<Station> stationList = selectedTimetable.getFilteredList();
-		int[] pageLimits = selectedTimetable.delimitPages();
-		finalPage = (pageLimits.length - 1);
-		int printTo = pageLimits[currentPage];
-		int printFrom;
-		if (currentPage == 0) {
-			printFrom = 0;
-		} else {
-			printFrom = pageLimits[currentPage - 1] + 1;
-		}
-
-		System.out.println("-------------------------------------\n" + selectedTimetable.getSchedule()
-				+ "\n-------------------------------------");
-		for (Station station : stationList) {
-			String printedRow = station.getFormattedName() + "\t";
-			ArrayList<String> stationTimes = selectedTimetable.getStationTimes(station);
-			for (int i = printFrom; i <= printTo; i++) {
-				printedRow += "\t" + stationTimes.get(i) + "\t";
+		if (selectedTimetable.isOriginDestinationFiltered) {
+			String durationRow = "Duration: ";
+			for (int i = 0; i < selectedTimetable.toAppend; i++) {
+				durationRow = " " + durationRow;
 			}
-			System.out.println(printedRow);
+
+			ArrayList<String> durationList = selectedTimetable.setDurations();
+			for (int i = printFrom; i <= printTo; i++) {
+				durationRow += "\t" + durationList.get(i);
+			}
+			System.out.println(durationRow);
 		}
 		return pageMenu();
 	}
