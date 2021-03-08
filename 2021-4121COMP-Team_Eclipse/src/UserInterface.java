@@ -48,8 +48,7 @@ public class UserInterface {
 		}
 
 	}
-	
-	
+
 	// TODO: Rework to allow for two directions
 	public static Timetable selectTimetable(Timetable monFriTable, Timetable satTable, Timetable sunTable) {
 		System.out.println("-- Select Timetable --");
@@ -87,7 +86,9 @@ public class UserInterface {
 		return userSelection;
 	}
 
-	public static Timetable filterTimetable(Timetable unfilteredTable) {
+	public static Timetable filterTimetable(Timetable originalTable) {
+		// Make a deep copy of Timetable object here, instead of using original
+		Timetable unfilteredTable = new Timetable(originalTable);
 		String userSelection = filterMenu();
 		if (userSelection.equals("4")) {
 			return unfilteredTable;
@@ -99,30 +100,41 @@ public class UserInterface {
 	}
 
 	public static Timetable filterDouble(Timetable unfilteredTable) {
-		System.out.println("Enter origin station code:");
-		String originCode = inputScan.nextLine();
-		System.out.println("Enter destination station code:");
-		String destinationCode = inputScan.nextLine();
-		//TODO: Allow for either name or code (reuse code used elsewhere)
-		
-		//TODO: Work out direction of travel based on origin/destination
-		// give each station an index when loading in - work based on that?
-		
-		
-		
-		
 		ArrayList<Station> originalList = unfilteredTable.getStationList();
 		ArrayList<Station> filteredList = new ArrayList<>();
-		for (Station station : originalList) {
-			if ((station.getCode().equals(destinationCode)) || (station.getCode().equals(originCode))) {
-				filteredList.add(station);
-			}
-		}
 
+		System.out.println("Enter origin station name/code:");
+		Station origin = getValidStation(originalList);
+		System.out.println("Enter destination station name/code:");
+		Station destination = getValidStation(originalList);
+
+		filteredList.add(origin);
+		filteredList.add(destination);
+
+		// TODO: Work out direction of travel based on origin/destination
+		// give each station an index when loading in - work based on that?
+		
+		removeBlankColumns(unfilteredTable, filteredList);
+
+
+		Timetable filteredTable = new Timetable(filteredList, unfilteredTable.getSchedule(),
+				unfilteredTable.getCodeMap(), unfilteredTable.getStationMap());
+		filteredTable.isOriginDestinationFiltered = true;
+		return filteredTable;
+	}
+	
+	
+	/**
+	 *  Removes timetable columns where a train does not stop at a filtered station
+	 * 
+	 * @param timetable
+	 * @param stationList
+	 * 
+	 */
+	public static void removeBlankColumns(Timetable timetable, ArrayList<Station> stationList) {
 		ArrayList<Integer> toRemove = new ArrayList<>();
-
-		for (Station station : filteredList) {
-			ArrayList<String> stationTimes = unfilteredTable.getStationTimes(station);
+		for (Station station : stationList) {
+			ArrayList<String> stationTimes = timetable.getStationTimes(station);
 			for (int i = 0; i < stationTimes.size(); i++) {
 				if (stationTimes.get(i).equals("-")) {
 					toRemove.add(i);
@@ -130,8 +142,8 @@ public class UserInterface {
 			}
 		}
 
-		for (Station station : filteredList) {
-			ArrayList<String> stationTimes = unfilteredTable.getStationTimes(station);
+		for (Station station : stationList) {
+			ArrayList<String> stationTimes = timetable.getStationTimes(station);
 
 			for (int i = stationTimes.size() - 1; i >= 0; i--) {
 				if (toRemove.contains(i)) {
@@ -139,43 +151,20 @@ public class UserInterface {
 				}
 			}
 		}
-
-		Timetable filteredTable = new Timetable(filteredList, unfilteredTable.getSchedule(),
-				unfilteredTable.getCodeMap(), unfilteredTable.getStationMap());
-		filteredTable.isOriginDestinationFiltered = true;
-		return filteredTable;
 	}
 
 	public static Timetable filterSingle(Timetable unfilteredTable) {
-		System.out.println("Enter station code:");
-		String selectedCode = inputScan.nextLine();
 		ArrayList<Station> originalList = unfilteredTable.getStationList();
 		ArrayList<Station> filteredList = new ArrayList<>();
-
-		Station selectedStation = null;
-		for (Station station : originalList) {
-			if (station.getCode().equals(selectedCode)) {
-				selectedStation = station;
-			}
-		}
-		if (selectedStation == null) {
-			System.err.println("Could not find station code, returning unfiltered table");
-			return unfilteredTable;
-		} else {
-			System.err.println(
-					"DEBUG: Station selected is " + selectedStation.getName() + " (" + selectedStation.getCode() + ")");
-		}
+		
+		System.out.println("Enter station code:");
+		Station selectedStation = getValidStation(originalList);
+		
 		ArrayList<String> selectedTimes = unfilteredTable.getStationTimes(selectedStation);
-		System.err.println("Length of stationTimes for " + selectedCode + " is " + selectedTimes.size());
 		ArrayList<Integer> toRemove = new ArrayList<>();
 		for (int i = 0; i < selectedTimes.size(); i++) {
 			if (selectedTimes.get(i).equals("-")) {
-				System.err.println("DEBUG: Index " + i + " contains " + selectedTimes.get(i));
-				System.err.println("TO REMOVE");
 				toRemove.add(i);
-			} else {
-				System.err.println("DEBUG: Index " + i + " contains " + selectedTimes.get(i));
-				System.err.println("NOT REMOVED");
 			}
 		}
 		filteredList = originalList;
@@ -185,10 +174,7 @@ public class UserInterface {
 
 			for (int i = stationTimes.size() - 1; i >= 0; i--) {
 				if (toRemove.contains(i)) {
-					System.err.println("Removing column " + i + ", containing " + stationTimes.get(i));
 					stationTimes.remove(i);
-				} else {
-					System.err.println("Printing column " + i + ", containing " + stationTimes.get(i));
 				}
 			}
 		}
@@ -316,35 +302,41 @@ public class UserInterface {
 		}
 	}
 
-	private static boolean isFilterValid(Timetable selectedTimetable) {
-		System.out.println("Enter origin station name/code");
-		String origin = inputScan.nextLine();
-		System.out.println("Enter destination station name/code");
-		String destination = inputScan.nextLine();
-
-		ArrayList<Station> stationList = selectedTimetable.getStationList();
-		boolean foundOrigin = false;
-		boolean foundDestination = false;
+	/**
+	 * Searches through a list for a station, based on either name or 3-letter code
+	 * 
+	 * 
+	 * @param stationList - list of stations to search
+	 * @param stationID   - either station name or station code
+	 * @return Station found, null if not found
+	 */
+	private static Station getStation(ArrayList<Station> stationList, String stationID) {
 		for (Station station : stationList) {
-			if (origin.equals(station.getCode()) || origin.equals(station.getName())) {
-				foundOrigin = true;
-				System.out.println("DEBUG: ORIGIN STATION FOUND");
-			}
-			if (destination.equals(station.getCode()) || destination.equals(station.getName())) {
-				foundDestination = true;
-				System.out.println("DEBUG: DESTINATION STATION FOUND");
+			if (stationID.equals(station.getCode()) || stationID.equals(station.getName())) {
+				return station;
 			}
 		}
-		if (foundOrigin == false) {
-			System.out.println("Could not find origin station");
-			return false;
-		}
-		if (foundDestination == false) {
-			System.out.println("Could not find destination station");
-			return false;
-		}
-		System.out.println("DEBUG: STATIONS CORRECTLY FOUND");
-		return true;
+		return null;
 	}
 
+	/**
+	 * Prompts user until they identify valid station name/code
+	 * 
+	 * @param stationList
+	 * @return returns validated Station
+	 */
+	private static Station getValidStation(ArrayList<Station> stationList) {
+		String input;
+		Station station = null;
+		while (true) {
+			input = inputScan.nextLine();
+			station = getStation(stationList, input);
+			if (station != null) {
+				break;
+			} else {
+				System.out.println("Not found, please enter a valid station name or 3-letter code");
+			}
+		}
+		return station;
+	}
 }

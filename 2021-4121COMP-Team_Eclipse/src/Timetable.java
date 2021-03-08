@@ -22,6 +22,15 @@ public class Timetable {
 		this.stationMap = stationMap;
 	}
 
+	public Timetable(Timetable originalTable) {
+		this.isOriginDestinationFiltered = originalTable.isOriginDestinationFiltered;
+		this.schedule = originalTable.schedule;
+		this.stationList = new ArrayList<Station>();
+		for (Station station:originalTable.stationList) {
+			this.stationList.add(station);
+		}
+	}
+
 	public void setFilteredList(String origin, String destination) {
 		filteredList = new ArrayList<Station>();
 		for (Station station : stationList) {
