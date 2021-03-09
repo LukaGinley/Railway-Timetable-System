@@ -1,3 +1,5 @@
+Application entry point: src/DataLoader.java
+
 [Sprint Planning Log](https://docs.google.com/document/d/1krqAcJ18U3D53FMoibH7DxSqMPWv8_ZIioubt-LN6zI)
 
 [Review and Retrospective Log](https://docs.google.com/document/d/14lKmRPkoQZQYULeb9qNiKj_WiMqpfnQj3UgEP3-gmfc)
