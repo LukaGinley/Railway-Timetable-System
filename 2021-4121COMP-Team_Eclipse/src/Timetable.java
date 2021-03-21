@@ -68,6 +68,12 @@ public class Timetable {
 		case "Sunday":
 			stationTimes = station.getSunTimes();
 			break;
+		case "Monday - Saturday Reversed":
+			stationTimes = station.getMonSatTimesReversed();
+			break;
+		case "Sunday Reversed":
+			stationTimes = station.getSunTimesReversed();
+			break;
 		default:
 			System.out.println("Error: Timetable schedule not correctly set, defaulting to Monday-Friday times");
 			stationTimes = station.getMonFriTimes();

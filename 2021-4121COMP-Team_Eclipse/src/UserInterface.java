@@ -17,7 +17,7 @@ public class UserInterface {
 	 * @param sunTable
 	 * @throws FileNotFoundException
 	 */
-	public static void runProgram(Timetable monFriTable, Timetable satTable, Timetable sunTable)
+	public static void runProgram(Timetable monFriTable, Timetable satTable, Timetable sunTable, Timetable monSatTableReversed, Timetable sunTableReversed)
 			throws FileNotFoundException {
 
 		Timetable selectedTimetable = null;
@@ -27,11 +27,11 @@ public class UserInterface {
 
 				switch (mainMenuSelection) {
 				case "1":
-					selectedTimetable = selectTimetable(monFriTable, satTable, sunTable);
+					selectedTimetable = selectTimetable(monFriTable, satTable, sunTable, monSatTableReversed, sunTableReversed);
 
 					break;
 				case "2":
-					selectedTimetable = filterTimetable(selectTimetable(monFriTable, satTable, sunTable));
+					selectedTimetable = filterTimetable(selectTimetable(monFriTable, satTable, sunTable, monSatTableReversed, sunTableReversed));
 					break;
 				}
 
@@ -50,23 +50,38 @@ public class UserInterface {
 	}
 
 	// TODO: Rework to allow for two directions
-	public static Timetable selectTimetable(Timetable monFriTable, Timetable satTable, Timetable sunTable) {
+	public static Timetable selectTimetable(Timetable monFriTable, Timetable satTable, Timetable sunTable, Timetable monSatTableReversed, Timetable sunTableReversed) {
 		System.out.println("-- Select Timetable --");
 		System.out.println("1 - Monday - Friday");
 		System.out.println("2 - Saturday");
 		System.out.println("3 - Sunday");
 
-		Timetable selectedTimetable;
+		Timetable selectedTimetable = null;
 		String menuSelection = validate(new String[] { "1", "2", "3", "4" });
 		switch (menuSelection) {
 		case "1":
-			selectedTimetable = monFriTable;
+			System.out.println("1 - From Liverpool");		//Make it not display this when showing the timetable
+			System.out.println("2 - From Blackpool");
+			String userInput = inputScan.nextLine();
+				if(userInput.matches("1")) {
+					selectedTimetable = monFriTable;
+				} else { 
+					selectedTimetable = monSatTableReversed;
+				}
 			break;
 		case "2":
 			selectedTimetable = satTable;
 			break;
 		case "3":
-			selectedTimetable = sunTable;
+			System.out.println("1 - From Liverpool");
+			System.out.println("2 - From Blackpool");
+			String userInput1 = inputScan.nextLine();	//userInput1 = why is it userInput1?? - Follow up with Matt
+				if(userInput1.matches("1")) {
+					selectedTimetable = sunTable;
+				} else {
+					selectedTimetable = sunTableReversed;
+				}
+			
 			break;
 
 		default:
@@ -76,13 +91,15 @@ public class UserInterface {
 		return selectedTimetable;
 	}
 
+
 	public static String filterMenu() {
 		System.out.println("-- Filter Timetable --");
 		System.out.println("1 - Origin only");
 		System.out.println("2 - Destination only");
 		System.out.println("3 - Origin & Destination");
-		System.out.println("4 - Return to menu");
-		String userSelection = validate(new String[] { "1", "2", "3", "4" });
+		System.out.println("4 - Filter by Station Facilities");
+		System.out.println("5 - Return to menu");
+		String userSelection = validate(new String[] { "1", "2", "3", "4", "5" });
 		return userSelection;
 	}
 
@@ -339,4 +356,69 @@ public class UserInterface {
 		}
 		return station;
 	}
+	
+	
+	private static int facilityInput(int i, int j) {
+		//String FacilityInput = " ";
+		boolean hasParking = false;
+		boolean hasBikeStorage = false;
+		boolean hasDisabledAccess = false;
+		
+		System.out.println("Would you like car parking? [Y/N]");
+		System.out.println("1 - Yes");
+		System.out.println("2 - No");
+		
+		String facilityInput = inputScan.nextLine();
+		
+		switch(facilityInput(1, 2)) {
+		case 1:
+			hasParking = true;
+			break;
+		case 2:
+			hasParking = false;
+			break;
+		default:
+			assert(false);
+		}
+		
+		System.out.println("Would you like bike racks, including storage? ");
+		System.out.println("1 - Yes");
+		System.out.println("2 - No");
+		
+		switch(facilityInput(1, 2)) {
+		case 1:
+			hasBikeStorage = true;
+			break;
+			
+		case 2:
+			hasBikeStorage = false;
+			break;
+		default:
+			assert(false);
+		}
+		
+		System.out.println("Would you be in need of disability assistance? ");
+		System.out.println("1 - Yes");
+		System.out.println("2 - No");
+		
+		switch(facilityInput(1, 2)) {
+		case 1:
+			hasDisabledAccess = true;
+			break;
+			
+		case 2:
+			hasDisabledAccess = false;
+			break;
+		default:
+			assert(false);
+		}
+		return 0;
+		
+	}
 }
+
+//	private static int facilityInput(int i, int j) {
+	//	// TODO Auto-generated method stub
+	//	return 0;
+	//}
+

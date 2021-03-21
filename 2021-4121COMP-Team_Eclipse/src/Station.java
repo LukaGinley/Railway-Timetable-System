@@ -10,6 +10,8 @@ public class Station {
 	private ArrayList<String> monFriTimes;
 	private ArrayList<String> satTimes;
 	private ArrayList<String> sunTimes;
+	private ArrayList<String> monSatTimesReversed;
+	private ArrayList<String> sunTimesReversed;
 	private String formattedName; //Name with spaces added, so it can be printed in a table
 	
 	
@@ -58,4 +60,23 @@ public class Station {
 	public void setSunTimes(ArrayList<String> sunTimes) {
 		this.sunTimes = sunTimes;
 	}
+	
+	public ArrayList<String> getMonSatTimesReversed() {
+		return monSatTimesReversed;
+	}
+	
+	public void setMonSatTimesReversed(ArrayList<String> monSatTimesReversed) {
+		this.monSatTimesReversed = monSatTimesReversed;
+	}
+	
+	public ArrayList<String> getSunTimesReversed() {
+		return sunTimesReversed;
+	}
+	
+	public void setSunTimesReversed(ArrayList<String> sunTimesReversed) {
+		this.sunTimesReversed = sunTimesReversed;
+	}
+	
 }
+
+

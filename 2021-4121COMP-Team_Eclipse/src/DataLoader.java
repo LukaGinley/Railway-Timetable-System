@@ -9,6 +9,8 @@ public class DataLoader {
 	private static final String PATH_SAT = "Saturday.csv";
 	private static final String PATH_SUN = "Sunday.csv";
 	private static final String PATH_CODES = "RailwayStationCodes.csv";
+	private static final String PATH_MONSATREV = "MondaySaturdayReversed.csv";
+	private static final String PATH_SUNREV = "SundayReversed.csv";
 	private static HashMap<String, String> codeMap;
 	private static HashMap<String, Station> stationMap;
 
@@ -18,8 +20,11 @@ public class DataLoader {
 		Timetable monFriTable = loadTable(PATH_MONFRI, "Monday - Friday");
 		Timetable satTable = loadTable(PATH_SAT, "Saturday");
 		Timetable sunTable = loadTable(PATH_SUN, "Sunday");
+		Timetable monSatTableReversed = loadTable(PATH_MONSATREV, "Monday - Saturday Reversed");
+		Timetable sunTableReversed = loadTable(PATH_SUNREV, "Sunday Reversed");
+		
 
-		UserInterface.runProgram(monFriTable, satTable, sunTable);
+		UserInterface.runProgram(monFriTable, satTable, sunTable, monSatTableReversed, sunTableReversed);
 	}
 
 	/**
@@ -88,6 +93,12 @@ public class DataLoader {
 				break;
 			case "Sunday":
 				station.setSunTimes(times);
+				break;
+			case "Monday - Saturday Reversed":
+				station.setMonSatTimesReversed(times);
+				break;
+			case "Sunday Reversed":
+				station.setSunTimesReversed(times);
 				break;
 			}
 		}
