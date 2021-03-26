@@ -97,8 +97,8 @@ public class UserInterface {
 		System.out.println("1 - Origin only");
 		System.out.println("2 - Destination only");
 		System.out.println("3 - Origin & Destination");
-		System.out.println("4 - Filter by Station Facilities");
-		System.out.println("5 - Return to menu");
+		//System.out.println("4 - Filter by Station Facilities");
+		System.out.println("4 - Return to menu");
 		String userSelection = validate(new String[] { "1", "2", "3", "4", "5" });
 		return userSelection;
 	}
