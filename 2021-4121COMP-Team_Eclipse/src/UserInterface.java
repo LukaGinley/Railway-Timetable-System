@@ -104,15 +104,16 @@ public class UserInterface {
 	}
 
 	public static Timetable filterTimetable(Timetable originalTable) {
-		// Make a deep copy of Timetable object here, instead of using original
 		Timetable unfilteredTable = new Timetable(originalTable);
 		String userSelection = filterMenu();
-		if (userSelection.equals("4")) {
+		if (userSelection.equals("5")) {
 			return unfilteredTable;
 		} else if (userSelection.equals("3")) {
 			return filterDouble(unfilteredTable);
+		} else if (userSelection.equals("4")) {
+			return facilityInput();
 		} else {
-			return filterSingle(unfilteredTable);
+			return filterDouble(unfilteredTable);
 		}
 	}
 
@@ -358,67 +359,59 @@ public class UserInterface {
 	}
 	
 	
-	private static int facilityInput(int i, int j) {
-		//String FacilityInput = " ";
-		boolean hasParking = false;
-		boolean hasBikeStorage = false;
-		boolean hasDisabledAccess = false;
+	private static Timetable facilityInput() {
+	String facilityInput = " ";
+	boolean hasParking = false;
+	boolean hasBikeStorage = false;
+	boolean hasDisabledAccess = false;
+	
+	System.out.println("Would you like car parking?");
+	System.out.println("1 - Yes");
+	System.out.println("2 - No");
+	
+	switch ((validate(new String[] {"1", "2"}))) {
+	case "1":
+		hasParking = true;
+		break;
+	case "2":
+		hasParking = false;
+		break;
+	default:
+		assert(false); 
+	}
+	
+	System.out.println("Would you like bike racks, including storage? [Y/N] ");
+	System.out.println("1 - Yes");
+	System.out.println("2 - No");
+	
+	switch ((validate(new String[] {"1", "2"}))) {
+	case "1":
+		hasBikeStorage = true;
+		break;
 		
-		System.out.println("Would you like car parking? [Y/N]");
-		System.out.println("1 - Yes");
-		System.out.println("2 - No");
+	case "2":
+		hasBikeStorage = false;
+		break;
+	default:
+		assert(false);
+	}
+	
+	System.out.println("Would you be in need of disability assistance? [Y/N] ");
+	System.out.println("1 - Yes");
+	System.out.println("2 - No");
+	
+	switch ((validate(new String[] {"1", "2"}))) {
+	case "1":
+		hasDisabledAccess = true;
+		break;
 		
-		String facilityInput = inputScan.nextLine();
-		
-		switch(facilityInput(1, 2)) {
-		case 1:
-			hasParking = true;
-			break;
-		case 2:
-			hasParking = false;
-			break;
-		default:
-			assert(false);
-		}
-		
-		System.out.println("Would you like bike racks, including storage? ");
-		System.out.println("1 - Yes");
-		System.out.println("2 - No");
-		
-		switch(facilityInput(1, 2)) {
-		case 1:
-			hasBikeStorage = true;
-			break;
-			
-		case 2:
-			hasBikeStorage = false;
-			break;
-		default:
-			assert(false);
-		}
-		
-		System.out.println("Would you be in need of disability assistance? ");
-		System.out.println("1 - Yes");
-		System.out.println("2 - No");
-		
-		switch(facilityInput(1, 2)) {
-		case 1:
-			hasDisabledAccess = true;
-			break;
-			
-		case 2:
-			hasDisabledAccess = false;
-			break;
-		default:
-			assert(false);
-		}
-		return 0;
-		
+	case "2":
+		hasDisabledAccess = false;
+		break;
+	default:
+		assert(false);
+	}
+	return null;
+	
 	}
 }
-
-//	private static int facilityInput(int i, int j) {
-	//	// TODO Auto-generated method stub
-	//	return 0;
-	//}
-
