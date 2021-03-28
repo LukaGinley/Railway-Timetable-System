@@ -18,10 +18,10 @@ public class DataLoader {
 		codeMap = setCodeMap(PATH_CODES);
 		stationMap = new HashMap<>();
 		Timetable monFriTable = loadTable(PATH_MONFRI, "Monday - Friday");
-		Timetable satTable = loadTable(PATH_SAT, "Saturday");
-		Timetable sunTable = loadTable(PATH_SUN, "Sunday");
-		Timetable monSatTableReversed = loadTable(PATH_MONSATREV, "Monday - Saturday Reversed");
-		Timetable sunTableReversed = loadTable(PATH_SUNREV, "Sunday Reversed");
+		Timetable satTable = loadTable(PATH_MONFRI, "Saturday");
+		Timetable sunTable = loadTable(PATH_MONFRI, "Sunday");
+		Timetable monSatTableReversed = loadTable(PATH_MONFRI, "Monday - Saturday Reversed");
+		Timetable sunTableReversed = loadTable(PATH_MONFRI, "Sunday Reversed");
 		
 
 		UserInterface.runProgram(monFriTable, satTable, sunTable, monSatTableReversed, sunTableReversed);
@@ -80,7 +80,17 @@ public class DataLoader {
 
 			stationList.add(station);
 
-			for (int i = 1; i < parts.length; i++) {
+			if (parts[1].equals("P")) {
+				station.hasParking = true;
+			}
+			if (parts[2].equals("B")) {
+				station.hasBikeStorage = true;
+			}
+			if (parts[3].equals("D")) {
+				station.hasDisabledAccess = true;
+			}
+				
+			for (int i = 4; i < parts.length; i++) {
 				times.add(parts[i]);
 			}
 

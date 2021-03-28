@@ -3,9 +3,10 @@ import java.util.ArrayList;
 public class Station {
 	private String stationName;
 	private String stationCode;
-	private boolean hasParking;
-	private boolean hasBikeStorage;
-	private boolean hasDisabledAccess;
+	
+	public boolean hasParking;
+	public boolean hasBikeStorage;
+	public boolean hasDisabledAccess;
 	
 	private ArrayList<String> monFriTimes;
 	private ArrayList<String> satTimes;

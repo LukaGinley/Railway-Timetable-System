@@ -17,8 +17,8 @@ public class UserInterface {
 	 * @param sunTable
 	 * @throws FileNotFoundException
 	 */
-	public static void runProgram(Timetable monFriTable, Timetable satTable, Timetable sunTable, Timetable monSatTableReversed, Timetable sunTableReversed)
-			throws FileNotFoundException {
+	public static void runProgram(Timetable monFriTable, Timetable satTable, Timetable sunTable,
+			Timetable monSatTableReversed, Timetable sunTableReversed) throws FileNotFoundException {
 
 		Timetable selectedTimetable = null;
 		while (true) {
@@ -27,11 +27,13 @@ public class UserInterface {
 
 				switch (mainMenuSelection) {
 				case "1":
-					selectedTimetable = selectTimetable(monFriTable, satTable, sunTable, monSatTableReversed, sunTableReversed);
+					selectedTimetable = selectTimetable(monFriTable, satTable, sunTable, monSatTableReversed,
+							sunTableReversed);
 
 					break;
 				case "2":
-					selectedTimetable = filterTimetable(selectTimetable(monFriTable, satTable, sunTable, monSatTableReversed, sunTableReversed));
+					selectedTimetable = filterTimetable(
+							selectTimetable(monFriTable, satTable, sunTable, monSatTableReversed, sunTableReversed));
 					break;
 				}
 
@@ -50,7 +52,8 @@ public class UserInterface {
 	}
 
 	// TODO: Rework to allow for two directions
-	public static Timetable selectTimetable(Timetable monFriTable, Timetable satTable, Timetable sunTable, Timetable monSatTableReversed, Timetable sunTableReversed) {
+	public static Timetable selectTimetable(Timetable monFriTable, Timetable satTable, Timetable sunTable,
+			Timetable monSatTableReversed, Timetable sunTableReversed) {
 		System.out.println("-- Select Timetable --");
 		System.out.println("1 - Monday - Friday");
 		System.out.println("2 - Saturday");
@@ -60,14 +63,14 @@ public class UserInterface {
 		String menuSelection = validate(new String[] { "1", "2", "3", "4" });
 		switch (menuSelection) {
 		case "1":
-			System.out.println("1 - From Liverpool");		//Make it not display this when showing the timetable
+			System.out.println("1 - From Liverpool"); // Make it not display this when showing the timetable
 			System.out.println("2 - From Blackpool");
 			String userInput = inputScan.nextLine();
-				if(userInput.matches("1")) {
-					selectedTimetable = monFriTable;
-				} else { 
-					selectedTimetable = monSatTableReversed;
-				}
+			if (userInput.matches("1")) {
+				selectedTimetable = monFriTable;
+			} else {
+				selectedTimetable = monSatTableReversed;
+			}
 			break;
 		case "2":
 			selectedTimetable = satTable;
@@ -75,13 +78,13 @@ public class UserInterface {
 		case "3":
 			System.out.println("1 - From Liverpool");
 			System.out.println("2 - From Blackpool");
-			String userInput1 = inputScan.nextLine();	//userInput1 = why is it userInput1?? - Follow up with Matt
-				if(userInput1.matches("1")) {
-					selectedTimetable = sunTable;
-				} else {
-					selectedTimetable = sunTableReversed;
-				}
-			
+			String userInput1 = inputScan.nextLine(); // userInput1 = why is it userInput1?? - Follow up with Matt
+			if (userInput1.matches("1")) {
+				selectedTimetable = sunTable;
+			} else {
+				selectedTimetable = sunTableReversed;
+			}
+
 			break;
 
 		default:
@@ -91,13 +94,12 @@ public class UserInterface {
 		return selectedTimetable;
 	}
 
-
 	public static String filterMenu() {
 		System.out.println("-- Filter Timetable --");
 		System.out.println("1 - Origin only");
 		System.out.println("2 - Destination only");
 		System.out.println("3 - Origin & Destination");
-		//System.out.println("4 - Filter by Station Facilities");
+		System.out.println("4 - Filter by Station Facilities");
 		System.out.println("4 - Return to menu");
 		String userSelection = validate(new String[] { "1", "2", "3", "4", "5" });
 		return userSelection;
@@ -111,7 +113,7 @@ public class UserInterface {
 		} else if (userSelection.equals("3")) {
 			return filterDouble(unfilteredTable);
 		} else if (userSelection.equals("4")) {
-			return facilityInput();
+			return facilityFilter(facilityInput());
 		} else {
 			return filterDouble(unfilteredTable);
 		}
@@ -131,19 +133,17 @@ public class UserInterface {
 
 		// TODO: Work out direction of travel based on origin/destination
 		// give each station an index when loading in - work based on that?
-		
-		removeBlankColumns(unfilteredTable, filteredList);
 
+		removeBlankColumns(unfilteredTable, filteredList);
 
 		Timetable filteredTable = new Timetable(filteredList, unfilteredTable.getSchedule(),
 				unfilteredTable.getCodeMap(), unfilteredTable.getStationMap());
 		filteredTable.isOriginDestinationFiltered = true;
 		return filteredTable;
 	}
-	
-	
+
 	/**
-	 *  Removes timetable columns where a train does not stop at a filtered station
+	 * Removes timetable columns where a train does not stop at a filtered station
 	 * 
 	 * @param timetable
 	 * @param stationList
@@ -174,10 +174,10 @@ public class UserInterface {
 	public static Timetable filterSingle(Timetable unfilteredTable) {
 		ArrayList<Station> originalList = unfilteredTable.getStationList();
 		ArrayList<Station> filteredList = new ArrayList<>();
-		
+
 		System.out.println("Enter station code:");
 		Station selectedStation = getValidStation(originalList);
-		
+
 		ArrayList<String> selectedTimes = unfilteredTable.getStationTimes(selectedStation);
 		ArrayList<Integer> toRemove = new ArrayList<>();
 		for (int i = 0; i < selectedTimes.size(); i++) {
@@ -280,6 +280,15 @@ public class UserInterface {
 				+ "\n-------------------------------------");
 		for (Station station : stationList) {
 			String printedRow = station.getFormattedName() + "\t";
+			if (station.hasParking) {
+				printedRow += "P\t";
+			}
+			if (station.hasBikeStorage) {
+				printedRow += "B\t";
+			}
+			if (station.hasDisabledAccess) {
+				printedRow += "D\t";
+			}
 			ArrayList<String> stationTimes = selectedTimetable.getStationTimes(station);
 			for (int i = printFrom; i <= printTo; i++) {
 				printedRow += "\t" + stationTimes.get(i) + "\t";
@@ -357,61 +366,72 @@ public class UserInterface {
 		}
 		return station;
 	}
-	
-	
-	private static Timetable facilityInput() {
-	String facilityInput = " ";
-	boolean hasParking = false;
-	boolean hasBikeStorage = false;
-	boolean hasDisabledAccess = false;
-	
-	System.out.println("Would you like car parking?");
-	System.out.println("1 - Yes");
-	System.out.println("2 - No");
-	
-	switch ((validate(new String[] {"1", "2"}))) {
-	case "1":
-		hasParking = true;
-		break;
-	case "2":
-		hasParking = false;
-		break;
-	default:
-		assert(false); 
-	}
-	
-	System.out.println("Would you like bike racks, including storage? [Y/N] ");
-	System.out.println("1 - Yes");
-	System.out.println("2 - No");
-	
-	switch ((validate(new String[] {"1", "2"}))) {
-	case "1":
-		hasBikeStorage = true;
-		break;
+
+	private static ArrayList<Boolean> facilityInput() {
+		String facilityInput = " ";
+		boolean hasParking = false;
+		boolean hasBikeStorage = false;
+		boolean hasDisabledAccess = false;
 		
-	case "2":
-		hasBikeStorage = false;
-		break;
-	default:
-		assert(false);
-	}
-	
-	System.out.println("Would you be in need of disability assistance? [Y/N] ");
-	System.out.println("1 - Yes");
-	System.out.println("2 - No");
-	
-	switch ((validate(new String[] {"1", "2"}))) {
-	case "1":
-		hasDisabledAccess = true;
-		break;
+		ArrayList<Boolean> facilityList = new ArrayList<>();
+
+		System.out.println("Would you like car parking?");
+		System.out.println("1 - Yes");
+		System.out.println("2 - No");
+
+		switch ((validate(new String[] { "1", "2" }))) {
+		case "1":
+			hasParking = true;
+			break;
+		case "2":
+			hasParking = false;
+			break;
+		default:
+			assert (false);
+		}
+
+		System.out.println("Would you like bike racks, including storage? [Y/N] ");
+		System.out.println("1 - Yes");
+		System.out.println("2 - No");
+
+		switch ((validate(new String[] { "1", "2" }))) {
+		case "1":
+			hasBikeStorage = true;
+			break;
+
+		case "2":
+			hasBikeStorage = false;
+			break;
+		default:
+			assert (false);
+		}
+
+		System.out.println("Would you be in need of disability assistance? [Y/N] ");
+		System.out.println("1 - Yes");
+		System.out.println("2 - No");
+
+		switch ((validate(new String[] { "1", "2" }))) {
+		case "1":
+			hasDisabledAccess = true;
+			break;
+
+		case "2":
+			hasDisabledAccess = false;
+			break;
+		default:
+			assert (false);
+		}
 		
-	case "2":
-		hasDisabledAccess = false;
-		break;
-	default:
-		assert(false);
+		return facilityList;
+
 	}
-	return null;
 	
+	private static Timetable facilityFilter(ArrayList<Boolean> facilityList) {
+		
+		
+		return null;
 	}
+	
+	
+	
 }
