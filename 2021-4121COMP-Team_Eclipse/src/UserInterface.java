@@ -113,7 +113,7 @@ public class UserInterface {
 		} else if (userSelection.equals("3")) {
 			return filterDouble(unfilteredTable);
 		} else if (userSelection.equals("4")) {
-			return facilityFilter(facilityInput());
+			return facilityFilter(facilityInput(), unfilteredTable);
 		} else {
 			return filterDouble(unfilteredTable);
 		}
@@ -426,12 +426,19 @@ public class UserInterface {
 
 	}
 	
-	private static Timetable facilityFilter(ArrayList<Boolean> facilityList) {
-		
-		
-		return null;
+	private static Timetable facilityFilter(ArrayList<Boolean> facilityList, Timetable unfilteredTable) {
+
+			ArrayList<Station> originalList = unfilteredTable.getStationList();
+			ArrayList<Station> filteredList = new ArrayList<>();
+			
+			boolean hasParking = facilityList.get(0);
+			boolean hasBikeStorage = facilityList.get(1);
+			boolean hasDisabledAccess = facilityList.get(2);
+			
+			Timetable filteredTable = new Timetable(filteredList, unfilteredTable.getSchedule(),
+					unfilteredTable.getCodeMap(), unfilteredTable.getStationMap());
+			return filteredTable;
+			
 	}
-	
-	
 	
 }
