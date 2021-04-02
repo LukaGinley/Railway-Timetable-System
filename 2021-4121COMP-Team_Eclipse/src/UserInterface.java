@@ -100,7 +100,7 @@ public class UserInterface {
 		System.out.println("2 - Destination only");
 		System.out.println("3 - Origin & Destination");
 		System.out.println("4 - Filter by Station Facilities");
-		System.out.println("4 - Return to menu");
+		System.out.println("5 - Print without filtering");
 		String userSelection = validate(new String[] { "1", "2", "3", "4", "5" });
 		return userSelection;
 	}
@@ -187,7 +187,6 @@ public class UserInterface {
 		}
 		filteredList = originalList;
 		for (Station station : filteredList) {
-			System.err.println("Currently on station " + station.getName());
 			ArrayList<String> stationTimes = unfilteredTable.getStationTimes(station);
 
 			for (int i = stationTimes.size() - 1; i >= 0; i--) {
@@ -279,12 +278,12 @@ public class UserInterface {
 		System.out.println("-------------------------------------\n" + selectedTimetable.getSchedule()
 				+ "\n-------------------------------------");
 		for (Station station : stationList) {
-			String printedRow = station.getFormattedName() + "\t";
+			String printedRow = station.getFormattedName() + " ";
 			if (station.hasParking) {
-				printedRow += "P\t";
+				printedRow += "P ";
 			}
 			if (station.hasBikeStorage) {
-				printedRow += "B\t";
+				printedRow += "B ";
 			}
 			if (station.hasDisabledAccess) {
 				printedRow += "D\t";
@@ -422,6 +421,11 @@ public class UserInterface {
 			assert (false);
 		}
 		
+
+		facilityList.add(hasParking);
+		facilityList.add(hasBikeStorage);
+		facilityList.add(hasDisabledAccess);
+		
 		return facilityList;
 
 	}
@@ -435,6 +439,21 @@ public class UserInterface {
 			boolean hasBikeStorage = facilityList.get(1);
 			boolean hasDisabledAccess = facilityList.get(2);
 			
+			for (Station station:originalList) {
+				if (hasParking == true && station.hasParking == false) {
+					continue;
+				}
+				if (hasBikeStorage == true && station.hasBikeStorage == false) {
+					continue;
+				}
+				if (hasDisabledAccess == true && station.hasDisabledAccess == false) {
+					continue;
+				}
+				filteredList.add(station);
+			}
+			
+			
+			
 			Timetable filteredTable = new Timetable(filteredList, unfilteredTable.getSchedule(),
 					unfilteredTable.getCodeMap(), unfilteredTable.getStationMap());
 			return filteredTable;
@@ -442,3 +461,15 @@ public class UserInterface {
 	}
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
