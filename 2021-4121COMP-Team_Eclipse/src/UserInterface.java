@@ -115,7 +115,7 @@ public class UserInterface {
 		} else if (userSelection.equals("4")) {
 			return facilityFilter(facilityInput(), unfilteredTable);
 		} else {
-			return filterDouble(unfilteredTable);
+			return filterSingle(unfilteredTable);
 		}
 	}
 
