@@ -281,12 +281,18 @@ public class UserInterface {
 			String printedRow = station.getFormattedName() + " ";
 			if (station.hasParking) {
 				printedRow += "P ";
+			} else {
+				printedRow += "  ";
 			}
 			if (station.hasBikeStorage) {
 				printedRow += "B ";
+			} else {
+				printedRow += "  ";
 			}
 			if (station.hasDisabledAccess) {
 				printedRow += "D\t";
+			} else {
+				printedRow += " \t";
 			}
 			ArrayList<String> stationTimes = selectedTimetable.getStationTimes(station);
 			for (int i = printFrom; i <= printTo; i++) {
