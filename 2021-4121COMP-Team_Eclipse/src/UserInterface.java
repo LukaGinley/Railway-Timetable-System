@@ -301,7 +301,7 @@ public class UserInterface {
 			System.out.println(printedRow);
 		}
 		if (selectedTimetable.isOriginDestinationFiltered) {
-			String durationRow = "Duration: ";
+			String durationRow = "Duration: \t";
 			for (int i = 0; i < selectedTimetable.toAppend; i++) {
 				durationRow = " " + durationRow;
 			}
