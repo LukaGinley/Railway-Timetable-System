@@ -11,5 +11,3 @@ Application entry point: src/DataLoader.java
 [Working Agreement](https://docs.google.com/document/d/1hq64R9xyp2LZZ4JY2fANQSvPL9RVavPtzHvcq1xhhvQ)
 
 [Use-Case Descriptions](https://docs.google.com/document/d/1Z-9WTeOY3MqFSEbFVb5P4koCRqSPgZdQYtWfeCfmZh0/edit)
-
-[Client Log](https://docs.google.com/document/d/1IBY7bRdBUZ7cCFM1cEQLZrnpgNIMGZ2-cVUKwtx3lZs/edit)
