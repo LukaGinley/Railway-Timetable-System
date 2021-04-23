@@ -61,11 +61,12 @@ public class UserInterface {
 
 		Timetable selectedTimetable = null;
 		String menuSelection = validate(new String[] { "1", "2", "3", "4" });
+		String userInput;
 		switch (menuSelection) {
 		case "1":
 			System.out.println("1 - From Liverpool"); // Make it not display this when showing the timetable
 			System.out.println("2 - From Blackpool");
-			String userInput = inputScan.nextLine();
+			userInput = inputScan.nextLine();
 			if (userInput.matches("1")) {
 				selectedTimetable = monFriTable;
 			} else {
@@ -73,13 +74,20 @@ public class UserInterface {
 			}
 			break;
 		case "2":
-			selectedTimetable = satTable;
+			System.out.println("1 - From Liverpool"); // Make it not display this when showing the timetable
+			System.out.println("2 - From Blackpool");
+			userInput = inputScan.nextLine();
+			if (userInput.matches("1")) {
+				selectedTimetable = satTable;
+			} else {
+				selectedTimetable = monSatTableReversed;
+			}
 			break;
 		case "3":
 			System.out.println("1 - From Liverpool");
 			System.out.println("2 - From Blackpool");
-			String userInput1 = inputScan.nextLine(); // userInput1 = why is it userInput1?? - Follow up with Matt
-			if (userInput1.matches("1")) {
+			userInput = inputScan.nextLine();
+			if (userInput.matches("1")) {
 				selectedTimetable = sunTable;
 			} else {
 				selectedTimetable = sunTableReversed;
@@ -373,7 +381,6 @@ public class UserInterface {
 	}
 
 	private static ArrayList<Boolean> facilityInput() {
-		String facilityInput = " ";
 		boolean hasParking = false;
 		boolean hasBikeStorage = false;
 		boolean hasDisabledAccess = false;
