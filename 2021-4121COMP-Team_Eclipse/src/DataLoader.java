@@ -60,7 +60,7 @@ public class DataLoader {
 	private static Timetable loadTable(String filePath, String schedule) throws FileNotFoundException {
 		Scanner fileScan = new Scanner(new FileReader(filePath));
 		ArrayList<Station> stationList = new ArrayList<>();
-		Timetable table = new Timetable(stationList, schedule, codeMap, stationMap);
+		Timetable table = new Timetable(stationList, schedule);
 
 		while (fileScan.hasNext()) {
 			ArrayList<String> times = new ArrayList<>();

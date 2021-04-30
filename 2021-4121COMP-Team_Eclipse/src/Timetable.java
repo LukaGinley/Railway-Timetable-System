@@ -4,8 +4,6 @@ import java.util.HashMap;
 public class Timetable {
 	public boolean isOriginDestinationFiltered;
 	private static final int PAGE_WIDTH = 8;
-	private static HashMap<String, String> codeMap;
-	private static HashMap<String, Station> stationMap;
 	private String schedule;
 	private ArrayList<Station> stationList;
 	private ArrayList<Station> filteredList;
@@ -13,13 +11,10 @@ public class Timetable {
 	private ArrayList<String> durationList;
 	public int toAppend;
 
-	public Timetable(ArrayList<Station> stationList, String schedule, HashMap<String, String> codeMap,
-			HashMap<String, Station> stationMap) {
+	public Timetable(ArrayList<Station> stationList, String schedule) {
 		this.isOriginDestinationFiltered = false;
 		this.stationList = stationList;
 		this.schedule = schedule;
-		this.codeMap = codeMap;
-		this.stationMap = stationMap;
 	}
 
 	public Timetable(Timetable originalTable) {
@@ -38,14 +33,6 @@ public class Timetable {
 				filteredList.add(station);
 			}
 		}
-	}
-
-	public HashMap<String, String> getCodeMap() {
-		return codeMap;
-	}
-
-	public HashMap<String, Station> getStationMap() {
-		return stationMap;
 	}
 
 	/**

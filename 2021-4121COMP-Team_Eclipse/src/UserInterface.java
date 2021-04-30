@@ -51,7 +51,6 @@ public class UserInterface {
 
 	}
 
-	// TODO: Rework to allow for two directions
 	public static Timetable selectTimetable(Timetable monFriTable, Timetable satTable, Timetable sunTable,
 			Timetable monSatTableReversed, Timetable sunTableReversed) {
 		System.out.println("-- Select Timetable --");
@@ -64,7 +63,7 @@ public class UserInterface {
 		String userInput;
 		switch (menuSelection) {
 		case "1":
-			System.out.println("1 - From Liverpool"); // Make it not display this when showing the timetable
+			System.out.println("1 - From Liverpool");
 			System.out.println("2 - From Blackpool");
 			userInput = inputScan.nextLine();
 			if (userInput.matches("1")) {
@@ -74,7 +73,7 @@ public class UserInterface {
 			}
 			break;
 		case "2":
-			System.out.println("1 - From Liverpool"); // Make it not display this when showing the timetable
+			System.out.println("1 - From Liverpool"); 
 			System.out.println("2 - From Blackpool");
 			userInput = inputScan.nextLine();
 			if (userInput.matches("1")) {
@@ -139,13 +138,9 @@ public class UserInterface {
 		filteredList.add(origin);
 		filteredList.add(destination);
 
-		// TODO: Work out direction of travel based on origin/destination
-		// give each station an index when loading in - work based on that?
-
 		removeBlankColumns(unfilteredTable, filteredList);
 
-		Timetable filteredTable = new Timetable(filteredList, unfilteredTable.getSchedule(),
-				unfilteredTable.getCodeMap(), unfilteredTable.getStationMap());
+		Timetable filteredTable = new Timetable(filteredList, unfilteredTable.getSchedule());
 		filteredTable.isOriginDestinationFiltered = true;
 		return filteredTable;
 	}
@@ -204,8 +199,7 @@ public class UserInterface {
 			}
 		}
 
-		Timetable filteredTable = new Timetable(filteredList, unfilteredTable.getSchedule(),
-				unfilteredTable.getCodeMap(), unfilteredTable.getStationMap());
+		Timetable filteredTable = new Timetable(filteredList, unfilteredTable.getSchedule());
 		return filteredTable;
 	}
 
@@ -402,7 +396,7 @@ public class UserInterface {
 			assert (false);
 		}
 
-		System.out.println("Would you like bike racks, including storage? [Y/N] ");
+		System.out.println("Would you like bike racks, including storage? ");
 		System.out.println("1 - Yes");
 		System.out.println("2 - No");
 
@@ -418,7 +412,7 @@ public class UserInterface {
 			assert (false);
 		}
 
-		System.out.println("Would you be in need of disability assistance? [Y/N] ");
+		System.out.println("Would you be in need of disability assistance? ");
 		System.out.println("1 - Yes");
 		System.out.println("2 - No");
 
@@ -467,8 +461,7 @@ public class UserInterface {
 			
 			
 			
-			Timetable filteredTable = new Timetable(filteredList, unfilteredTable.getSchedule(),
-					unfilteredTable.getCodeMap(), unfilteredTable.getStationMap());
+			Timetable filteredTable = new Timetable(filteredList, unfilteredTable.getSchedule());
 			return filteredTable;
 			
 	}
